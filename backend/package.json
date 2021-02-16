@@ -1,0 +1,43 @@
+{
+  "name": "perfect-code",
+  "version": "1.0.0",
+  "description": "The Only Code Review API That Makes You Better",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sidneyarcidiacono/perfect-code.git"
+  },
+  "keywords": [
+    "API",
+    "Node.js",
+    "Code",
+    "Review",
+    "Machine",
+    "Learning"
+  ],
+  "author": "Sid Arcidiacono",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sidneyarcidiacono/perfect-code/issues"
+  },
+  "homepage": "https://github.com/sidneyarcidiacono/perfect-code#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.9.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.16"
+  },
+  "devDependencies": {
+    "eslint": "^7.20.0"
+  }
+}
