@@ -19,7 +19,7 @@ const CodeSubmission = new Schema({
     required: true,
   },
   // This is our internal backreference to our user
-  user: { type: Schema.types.ObjectId, ref: 'User' },
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: false },
 }, { timestamp: true });
 
 module.exports = mongoose.model('CodeSubmission', CodeSubmission);
