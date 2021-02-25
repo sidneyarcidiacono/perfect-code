@@ -45,11 +45,10 @@ describe('Code submission API endpoints', () => {
           _id: SAMPLE_SUBMISSION_ID,
           user: user._id,
         });
-        return sampleSubmission.save();
-      })
-      .then((submission) => {
-        console.log(`Submission: ${submission}`);
-        done();
+        return sampleSubmission.save()
+          .then(() => {
+            done();
+          });
       });
   });
 

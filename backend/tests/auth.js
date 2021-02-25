@@ -30,6 +30,7 @@ describe('User API endpoints', () => {
     const sampleUser = new User({
       username: 'myuser',
       password: 'mypassword',
+      email: 'test@test.com',
       _id: SAMPLE_OBJECT_ID,
     });
     sampleUser.save()
