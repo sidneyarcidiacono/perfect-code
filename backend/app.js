@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const userRoutes = require('./routes/user');
+const submissionRoutes = require('./routes/submission');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 app.use('/user', userRoutes);
+app.use('/submission', submissionRoutes);
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => {
@@ -28,3 +30,5 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
   .catch((err) => {
     throw err;
   });
+
+module.exports = app;

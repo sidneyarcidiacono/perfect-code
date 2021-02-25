@@ -49,7 +49,7 @@ describe('User API endpoints', () => {
 
   it('should get one user', (done) => {
     chai.request(app)
-      .get(`/users/${SAMPLE_OBJECT_ID}`)
+      .get(`/user/${SAMPLE_OBJECT_ID}`)
       .end((err, res) => {
         if (err) { done(err); }
         expect(res).to.have.status(200);
@@ -62,8 +62,8 @@ describe('User API endpoints', () => {
 
   it('should post a new user', (done) => {
     chai.request(app)
-      .post('/users')
-      .send({ username: 'anotheruser', password: 'mypassword' })
+      .post('/user/signup')
+      .send({ username: 'anotheruser', email: 'test@test.com', password: 'mypassword' })
       .end((err, res) => {
         if (err) { done(err); }
         expect(res.body.user).to.be.an('object');
@@ -79,7 +79,7 @@ describe('User API endpoints', () => {
 
   it('should update a user', (done) => {
     chai.request(app)
-      .put(`/users/${SAMPLE_OBJECT_ID}`)
+      .put(`/user/${SAMPLE_OBJECT_ID}`)
       .send({ username: 'anotheruser' })
       .end((err, res) => {
         if (err) { done(err); }
@@ -96,7 +96,7 @@ describe('User API endpoints', () => {
 
   it('should delete a user', (done) => {
     chai.request(app)
-      .delete(`/users/${SAMPLE_OBJECT_ID}`)
+      .delete(`/user/${SAMPLE_OBJECT_ID}`)
       .end((err, res) => {
         if (err) { done(err); }
         expect(res.body.message).to.equal('Successfully deleted.');

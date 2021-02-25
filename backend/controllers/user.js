@@ -19,7 +19,7 @@ exports.signUpUser = (req, res, next) => {
 exports.getUser = (req, res, next) => {
   // TODO: populate user's codeSubmissions
   User.findById(req.params.id)
-    .then((user) => res.status(200).json({ user }))
+    .then((user) => res.status(200).json(user))
     .catch((err) => {
       throw new Error('User not found.');
     });
