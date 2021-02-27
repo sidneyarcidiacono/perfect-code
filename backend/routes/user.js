@@ -3,8 +3,10 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require('../controllers/user');
+const isAuth = require('../middleware/is-auth');
 
-router.get('/:id', userController.getUser);
+// Restrict access to routes using is-auth middleware
+router.get('/:id', isAuth, userController.getUser);
 
 router.post('/signin', userController.signInUser);
 
