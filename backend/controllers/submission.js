@@ -9,19 +9,16 @@ exports.newCodeSubmission = (req, res, next) => {
   let submission;
   newSubmission.save()
     .then((savedSubmission) => {
-      // TODO: Find user by logged in user
       submission = savedSubmission;
       return User.findById(req.userId);
     })
     .then((user) => {
-      console.log(`Submission: ${submission}`);
       user.codeSubs.push(submission._id);
       return user.save();
     })
-    .then((result) => getSessionToken())
-    .then((sessionToken) => submitBundle(submission, sessionToken))
-    .then((result) => {
-      console.log(`Result of submit bundle: ${result}`);
+    .then((result) => submitBundle(submission))
+    .then((response) => {
+      console.log(`Result of submit bundle: ${response}`);
       res.status(200).json({ submission });
     })
     .catch((err) => {

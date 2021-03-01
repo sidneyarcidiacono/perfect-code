@@ -6,23 +6,9 @@ const instance = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-async function getSessionToken() {
+async function submitBundle(codeSubmission) {
   try {
-    const response = await instance.post('login', {
-      source: 'perfectCodeAPI',
-    });
-    return response.data.sessionToken;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function submitBundle(codeSubmission, sessionToken) {
-  try {
-    const response = await instance.post('bundle', {
-      headers: { 'Session-Token': sessionToken.toString() },
-      body: { codeSubmission },
-    });
+    const response = await instance.post('bundle', codeSubmission);
     return response;
   } catch (error) {
     console.log(error);
@@ -30,4 +16,3 @@ async function submitBundle(codeSubmission, sessionToken) {
 }
 
 exports.submitBundle = submitBundle;
-exports.getSessionToken = getSessionToken;

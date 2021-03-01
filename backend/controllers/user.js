@@ -59,8 +59,7 @@ exports.signInUser = (req, res, next) => {
 };
 
 exports.getUser = (req, res, next) => {
-  // TODO: populate user's codeSubmissions
-  User.findById(req.params.id)
+  User.findById(req.params.id).lean().populate('codeSubs')
     .then((user) => res.status(200).json(user))
     .catch((err) => {
       throw new Error('User not found.');
