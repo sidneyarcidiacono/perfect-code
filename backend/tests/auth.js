@@ -12,6 +12,8 @@ const { expect } = chai;
 const should = chai.should();
 chai.use(chaiHttp);
 
+let token;
+
 /**
  * root level hooks
  */
@@ -35,7 +37,14 @@ describe('User API endpoints', () => {
     });
     sampleUser.save()
       .then(() => {
-        done();
+        chai.request(app)
+          .post('/user/signup')
+          .send(sampleUser)
+          .end((err, res) => {
+            if (err) { done(err); }
+            token = res.body.token;
+            done();
+          });
       });
   });
 
@@ -50,12 +59,12 @@ describe('User API endpoints', () => {
   it('should get one user', (done) => {
     chai.request(app)
       .get(`/user/${SAMPLE_OBJECT_ID}`)
+      .set('Authorization', `Bearer ${token}`)
       .end((err, res) => {
         if (err) { done(err); }
         expect(res).to.have.status(200);
-        expect(res.body).to.be.an('object');
-        expect(res.body.username).to.equal('myuser');
-        expect(res.body.password).to.equal(undefined);
+        expect(res.body.user).to.be.an('object');
+        expect(res.body.user.username).to.equal('myuser');
         done();
       });
   });
@@ -77,30 +86,25 @@ describe('User API endpoints', () => {
       });
   });
 
-  it('should update a user', (done) => {
+  it('should sign in a user', (done) => {
     chai.request(app)
-      .put(`/user/${SAMPLE_OBJECT_ID}`)
-      .send({ username: 'anotheruser' })
+      .post('/user/signin')
+      .send({ username: 'anotheruser', password: 'mypassword' })
       .end((err, res) => {
         if (err) { done(err); }
-        expect(res.body.user).to.be.an('object');
-        expect(res.body.user).to.have.property('username', 'anotheruser');
-
-        // check that user is actually inserted into database
-        User.findOne({ username: 'anotheruser' }).then((user) => {
-          expect(user).to.be.an('object');
-          done();
-        });
+        expect(res).to.have.status(200);
+        // expect(res.body.token).to.be.a('string');
+        done();
       });
   });
 
   it('should delete a user', (done) => {
     chai.request(app)
       .delete(`/user/${SAMPLE_OBJECT_ID}`)
+      .set('Authorization', `Bearer ${token}`)
       .end((err, res) => {
         if (err) { done(err); }
-        expect(res.body.message).to.equal('Successfully deleted.');
-        expect(res.body._id).to.equal(SAMPLE_OBJECT_ID);
+        expect(res).to.have.status(204);
 
         // check that user is actually deleted from database
         User.findOne({ username: 'myuser' }).then((user) => {

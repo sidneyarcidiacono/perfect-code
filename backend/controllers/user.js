@@ -14,14 +14,23 @@ exports.signUpUser = (req, res, next) => {
       });
       return user.save();
     })
-    .then((user) => res.status(200).json({
-      msg: 'Sign up successful!',
-      user: {
-        username: user.username,
+    .then((user) => {
+      const token = jwt.sign({
         email: user.email,
-        codeSubs: user.codeSubs,
-      },
-    }))
+        userId: user._id.toString(),
+      }, process.env.SECRET_KEY, {
+        expiresIn: '1h',
+      });
+      res.status(200).json({
+        msg: 'Sign up successful!',
+        user: {
+          username: user.username,
+          email: user.email,
+          codeSubs: user.codeSubs,
+        },
+        token,
+      });
+    })
     .catch((err) => {
       throw new Error('Unable to create user.');
     });
@@ -60,8 +69,16 @@ exports.signInUser = (req, res, next) => {
 
 exports.getUser = (req, res, next) => {
   User.findById(req.params.id).lean().populate('codeSubs')
-    .then((user) => res.status(200).json(user))
+    .then((user) => res.status(200).json({ user }))
     .catch((err) => {
       throw new Error('User not found.');
+    });
+};
+
+exports.deleteUserAccount = (req, res, next) => {
+  User.findByIdAndDelete(req.params.id)
+    .then((deletedUser) => res.status(204))
+    .catch((err) => {
+      throw err.message;
     });
 };

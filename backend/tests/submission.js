@@ -13,6 +13,8 @@ const { expect } = chai;
 const should = chai.should();
 chai.use(chaiHttp);
 
+let token;
+
 /**
  * root level hooks
  */
@@ -37,7 +39,6 @@ describe('Code submission API endpoints', () => {
     });
     sampleUser.save()
       .then((user) => {
-        console.log(`User: ${user}`);
         const sampleSubmission = new CodeSubmission({
           repo: 'testRepo',
           owner: 'myusername',
@@ -47,7 +48,14 @@ describe('Code submission API endpoints', () => {
         });
         return sampleSubmission.save()
           .then(() => {
-            done();
+            chai.request(app)
+              .post('/user/signup')
+              .send(sampleUser)
+              .end((err, res) => {
+                if (err) { done(err); }
+                token = res.body.token;
+                done();
+              });
           });
       });
   });
@@ -78,6 +86,7 @@ describe('Code submission API endpoints', () => {
     chai.request(app)
       .post('/submission/new')
       .send({ owner: 'anotherusername', repo: 'anotherRepo' })
+      .set('Authorization', `Bearer ${token}`)
       .end((err, res) => {
         if (err) { done(err); }
         expect(res.body.submission).to.be.an('object');
