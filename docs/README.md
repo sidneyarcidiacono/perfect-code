@@ -196,8 +196,66 @@ To delete a user account, please send a DELETE request to:
 /user/:id
 ```
 
-Where the "id" we expect is the user's ObjectId. This will be passed through an active JWT token, and can be extracted from the signature to make this process easier.
+Where the "id" we expect is the user's ObjectId. This will be passed through an active JWT token for authenticated users, and will be extracted from the signature on verification to make this process easier. You can then access the user id by accessing req.user._id.
 
 **Response**:
 
 A successful delete request will send a status code of **204**.
+
+### Updating User Accounts:
+
+Users will also have the ability to change their email or password. Additional verification for changing the email or password will be up to you and your application.
+
+**Request**:
+
+To update user data, please make a PUT request to:
+
+```zsh
+/user/:id
+```
+
+Where the "id" we expect is the user's ObjectId. This will be passed through an active JWT token for authenticated users, and can be extracted from the signature to make this process easier. You can then access the user id by accessing req.user._id.
+
+The user attributes that will be updated will be the attributes that are passed through the request body. Valid attributes are:
+
+- username:String
+
+- password:String
+
+- email:String
+
+
+Example request:
+
+```json
+{
+  "username": "newusername"
+}
+```
+
+```json
+{
+  "email": "mynewemail@mail.com"
+}
+```
+
+You may pass as many valid fields through a single PUT request as you would like at one time. Any combination of email, username, and password are currently accepted.
+
+**Response**:
+
+Perfect-Code will return to you the updated user information. This can be used to show the user instantly their updated values.
+
+```json
+{
+  "user": {
+    "codeSubs": [
+            "603db58ae3e3ee0015f5a5f7"
+        ],
+        "_id": "603d678cc843960014b5b178",
+        "username": "NEW",
+        "email": "TESTUPDATE@test.com",
+        "password": "test",
+        "__v": 1
+  }
+}
+```
