@@ -38,7 +38,7 @@ describe('Code submission API endpoints', function () {
       _id: SAMPLE_OBJECT_ID,
     });
     sampleUser.save()
-      .then((user) => {
+      .then(function (user) {
         const sampleSubmission = new CodeSubmission({
           repo: 'testRepo',
           owner: 'myusername',
@@ -47,11 +47,11 @@ describe('Code submission API endpoints', function () {
           user: user._id,
         });
         return sampleSubmission.save()
-          .then(() => {
+          .then(function () {
             chai.request(app)
               .post('/user/signup')
               .send(sampleUser)
-              .end((err, res) => {
+              .end(function (err, res) {
                 if (err) { done(err); }
                 token = res.body.token;
                 done();
@@ -63,8 +63,10 @@ describe('Code submission API endpoints', function () {
   // Delete sample user.
   afterEach(function (done) {
     User.deleteMany({ username: 'myuser' })
-      .then(() => CodeSubmission.deleteMany({ repo: 'testRepo' }))
-      .then(() => {
+      .then(function () {
+        CodeSubmission.deleteMany({ repo: ['testRepo', 'anotherRepo'] })
+      })
+      .then(function () {
         done();
       });
   });
@@ -72,7 +74,7 @@ describe('Code submission API endpoints', function () {
   it('should show a code submission analysis', function (done) {
     chai.request(app)
       .get(`/submission/${SAMPLE_SUBMISSION_ID}`)
-      .end((err, res) => {
+      .end( function (err, res) {
         if (err) { done(err); }
         expect(res).to.have.status(200);
         // expect(res.body).to.be.an('object');
@@ -87,29 +89,14 @@ describe('Code submission API endpoints', function () {
       .post('/submission/new')
       .send({ owner: 'anotherusername', repo: 'anotherRepo' })
       .set('Authorization', `Bearer ${token}`)
-      .end((err, res) => {
+      .end(function (err, res) {
         if (err) { done(err); }
         expect(res.body.submission).to.be.an('object');
         expect(res.body.submission).to.have.property('owner', 'anotherusername');
 
         // check that user is actually inserted into database
-        CodeSubmission.findOne({ owner: 'anotherusername' }).then((submission) => {
+        CodeSubmission.findOne({ owner: 'anotherusername' }).then(function (submission) {
           expect(submission).to.be.an('object');
-          done();
-        });
-      });
-  });
-
-  it('should delete a code submission', function (done) {
-    chai.request(app)
-      .delete(`/submission/delete/${SAMPLE_SUBMISSION_ID}`)
-      .end((err, res) => {
-        if (err) { done(err); }
-        expect(res).to.have.status(204);
-
-        // check that user is actually deleted from database
-        CodeSubmission.findOne({ _id: SAMPLE_SUBMISSION_ID }).then((submission) => {
-          expect(submission).to.equal(null);
           done();
         });
       });
