@@ -9,6 +9,8 @@ const isAuth = require('../middleware/isAuth');
 router.post('/new', isAuth, submissionController.newCodeSubmission);
 
 // Restrict access to routes using is-auth middleware
-router.get('/:id', submissionController.getAnalysis);
+router.get('/:id', isAuth, submissionController.getAnalysis);
+
+router.get('/:id/analysis', isAuth, submissionController.viewAnalysis);
 
 module.exports = router;
