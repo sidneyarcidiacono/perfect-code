@@ -1,5 +1,11 @@
 # Getting Started
 
+The base URL for perfect code is currently:
+
+```zsh
+http://localhost:3000
+```
+
 ### Signing Up Users
 
 To begin using Perfect Code, users must first have an account.
@@ -34,6 +40,39 @@ When signing up users, users are not initially provided with an authentication t
         "email": "test@perfectcode.com",
         "codeSubs": []
     }
+}
+```
+
+### Signing In Users:
+
+To sign in users, make a POST request to:
+
+```zsh
+/users/signin
+```
+
+In response, you'll receive a JWT token that can be used to authenticate subsequent requests. Our server will expect the token to be returned in subsequent request headers as an 'Authorization' header with a Bearer token. Your headers must follow this pattern:
+
+```zsh
+"Authorization": "Bearer <token>"
+```
+
+It will be expected that there is a space between "Bearer" and the JWT token.
+
+**Sign In Request**:
+
+```json
+{
+  "username": "someusername",
+  "password": "somepassword"
+}
+```
+
+**Sign In Response**:
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOiI2MDNkNjc4Y2M4NDM5NjAwMTRiNWIxNzgiLCJpYXQiOjE2MTQ2NTcyMjUsImV4cCI6MTYxNDY2MDgyNX0.clQhtrzV-xwOmK9ZyuKyYLuyd1IipNvjHOMz-8FjJmY"
 }
 ```
 
@@ -80,4 +119,16 @@ Without oid (will use latest commit on main or master branch):
 
 **Response**:
 
-Once the user submits code, it will be stored in their history as well as analyzed. The submission response will contain both the data they just submitted as well as the result of their code's analysis. 
+Once the user submits code, it will be stored in their history and packaged to be analyzed. The submission response will contain the submission object.
+
+```json
+{
+  "submission": {
+       "_id": "603db58ae3e3ee0015f5a5f7",
+       "owner": "githubusername",
+       "repo": "name-of-repository",
+       "oid": "branch-name",
+       "__v": 0
+   }
+}
+```
