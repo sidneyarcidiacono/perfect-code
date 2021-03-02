@@ -75,6 +75,14 @@ exports.getUser = (req, res, next) => {
     });
 };
 
+exports.updateUser = (req, res, next) => {
+  User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then((user) => res.status(200).json({ user }))
+    .catch((err) => {
+      throw err.message;
+    });
+};
+
 exports.deleteUserAccount = (req, res, next) => {
   User.findByIdAndDelete(req.params.id)
     .then((deletedUser) => res.status(204))
