@@ -200,4 +200,4 @@ Where the "id" we expect is the user's ObjectId. This will be passed through an 
 
 **Response**:
 
-A successful delete request will send a status code of **204**. 
+A successful delete request will send a status code of **204**.
