@@ -10,6 +10,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
   },
+  ignorePatterns: ['tests/auth.js', 'tests/submission.js'],
   rules: {
   },
 };

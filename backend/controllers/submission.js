@@ -16,9 +16,8 @@ exports.newCodeSubmission = (req, res, next) => {
       user.codeSubs.push(submission._id);
       return user.save();
     })
-    .then((result) => submitBundle(submission))
+    // .then((result) => submitBundle(submission))
     .then((response) => {
-      console.log(`Result of submit bundle: ${response}`);
       res.status(200).json({ submission });
     })
     .catch((err) => {

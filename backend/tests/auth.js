@@ -17,7 +17,7 @@ let token;
 /**
  * root level hooks
  */
-after((done) => {
+after(function (done) {
   mongoose.models = {};
   mongoose.modelSchemas = {};
   mongoose.connection.close();
@@ -26,9 +26,9 @@ after((done) => {
 
 const SAMPLE_OBJECT_ID = 'aaaaaaaaaaaa'; // 12 byte string
 
-describe('User API endpoints', () => {
+describe('User API endpoints', function () {
   // Create a sample user for use in tests.
-  beforeEach((done) => {
+  beforeEach(function (done) {
     const sampleUser = new User({
       username: 'myuser',
       password: 'mypassword',
@@ -49,14 +49,14 @@ describe('User API endpoints', () => {
   });
 
   // Delete sample user.
-  afterEach((done) => {
+  afterEach(function (done) {
     User.deleteMany({ username: ['myuser', 'anotheruser'] })
       .then(() => {
         done();
       });
   });
 
-  it('should get one user', (done) => {
+  it('should get one user', function (done) {
     chai.request(app)
       .get(`/user/${SAMPLE_OBJECT_ID}`)
       .set('Authorization', `Bearer ${token}`)
@@ -69,7 +69,7 @@ describe('User API endpoints', () => {
       });
   });
 
-  it('should post a new user', (done) => {
+  it('should post a new user', function (done) {
     chai.request(app)
       .post('/user/signup')
       .send({ username: 'anotheruser', email: 'test@test.com', password: 'mypassword' })
@@ -86,11 +86,12 @@ describe('User API endpoints', () => {
       });
   });
 
-  it('should sign in a user', (done) => {
+  it('should sign in a user', function (done) {
     chai.request(app)
       .post('/user/signin')
       .send({ username: 'anotheruser', password: 'mypassword' })
       .end((err, res) => {
+        console.log(`Err line 95 sign in: ${err}`)
         if (err) { done(err); }
         expect(res).to.have.status(200);
         // expect(res.body.token).to.be.a('string');
@@ -98,7 +99,7 @@ describe('User API endpoints', () => {
       });
   });
 
-  it('should delete a user', (done) => {
+  it('should delete a user', function (done) {
     chai.request(app)
       .delete(`/user/${SAMPLE_OBJECT_ID}`)
       .set('Authorization', `Bearer ${token}`)
