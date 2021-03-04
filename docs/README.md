@@ -34,7 +34,7 @@ To sign up users, you'll need to make a POST request to:
 
 You'll receive a "Sign up successful!" message in response that you can use to confirm success or display to users on the front end.
 
-When signing up users, users are not initially provided with an authentication token. You will have to prompt the user to sign in once they've created their account.
+When signing up users, users are also provided with an active JWT token.
 
 **Response**:
 
@@ -45,7 +45,8 @@ When signing up users, users are not initially provided with an authentication t
         "username": "testusername",
         "email": "test@perfectcode.com",
         "codeSubs": []
-    }
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOiI2MDNkNjc4Y2M4NDM5NjAwMTRiNWIxNzgiLCJpYXQiOjE2MTQ2NTcyMjUsImV4cCI6MTYxNDY2MDgyNX0.clQhtrzV-xwOmK9ZyuKyYLuyd1IipNvjHOMz-8FjJmY"
 }
 ```
 
