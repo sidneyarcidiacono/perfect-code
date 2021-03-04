@@ -113,7 +113,6 @@ describe('User API endpoints', function () {
   });
 
   it('should delete a user', function (done) {
-    this.timeout(10000)
     chai.request(app)
       .delete(`/user/delete`)
       .set('Authorization', `Bearer ${token}`)
