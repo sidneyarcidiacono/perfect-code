@@ -193,10 +193,16 @@ Users will have the ability to delete their accounts and data.
 To delete a user account, please send a DELETE request to:
 
 ```zsh
-/user/:id
+/user/delete
 ```
 
-Where the "id" we expect is the user's ObjectId. This will be passed through an active JWT token for authenticated users, and will be extracted from the signature on verification to make this process easier. You can then access the user id by accessing req.user._id.
+To avoid passing ID's through query parameters, identifying routes will find the user account to delete by an active JWT token. This means that you will also need to ensure to send an Authorization header.
+
+```json
+headers: {
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOiI2MDNkNjc4Y2M4NDM5NjAwMTRiNWIxNzgiLCJpYXQiOjE2MTQ2NTcyMjUsImV4cCI6MTYxNDY2MDgyNX0.clQhtrzV-xwOmK9ZyuKyYLuyd1IipNvjHOMz-8FjJmY"
+}
+```
 
 **Response**:
 
@@ -211,10 +217,16 @@ Users will also have the ability to change their email or password. Additional v
 To update user data, please make a PUT request to:
 
 ```zsh
-/user/:id
+/user/update
 ```
 
-Where the "id" we expect is the user's ObjectId. This will be passed through an active JWT token for authenticated users, and can be extracted from the signature to make this process easier. You can then access the user id by accessing req.user._id.
+To avoid passing ID's through query parameters, identifying routes will find the user account to delete by an active JWT token. This means that you will also need to ensure to send an Authorization header.
+
+```json
+headers: {
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOiI2MDNkNjc4Y2M4NDM5NjAwMTRiNWIxNzgiLCJpYXQiOjE2MTQ2NTcyMjUsImV4cCI6MTYxNDY2MDgyNX0.clQhtrzV-xwOmK9ZyuKyYLuyd1IipNvjHOMz-8FjJmY"
+}
+```
 
 The user attributes that will be updated will be the attributes that are passed through the request body. Valid attributes are:
 
@@ -239,7 +251,7 @@ Example request:
 }
 ```
 
-You may pass as many valid fields through a single PUT request as you would like at one time. Any combination of email, username, and password are currently accepted.
+You may pass as many valid fields through a single PUT request as you would like at one time. Any combination of email, username, and password, so long as they are valid, are currently accepted.
 
 **Response**:
 
