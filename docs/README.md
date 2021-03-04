@@ -9,7 +9,7 @@ PerfectCode aims to allow users to upload their code files, and receive a review
 The base URL for perfect code is currently:
 
 ```zsh
-http://localhost:3000
+http://perfectcode.cf
 ```
 
 ### Signing Up Users
