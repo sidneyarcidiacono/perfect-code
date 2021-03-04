@@ -35,22 +35,21 @@ describe('User API endpoints', function () {
       email: 'test@test.com',
       _id: SAMPLE_OBJECT_ID,
     });
-    sampleUser.save()
-      .then(function () {
-        chai.request(app)
-          .post('/user/signup')
-          .send(sampleUser)
-          .end((err, res) => {
-            if (err) { done(err); }
-            token = res.body.token;
-            done();
-          });
-      });
+      chai.request(app)
+        .post('/user/signup')
+        .set('content-type', 'application/json')
+        .send(sampleUser)
+        .end((err, res) => {
+          if (err) { done(err); }
+          sampleUser.save()
+          token = res.body.token;
+          done();
+        });
   });
 
   // Delete sample user.
   afterEach(function (done) {
-    User.deleteMany({ username: ['myuser', 'anotheruser'] })
+    User.deleteMany({ username: ['myuser', 'anotheruser', 'mynewusername'] })
       .then(function () {
         done();
       });
@@ -58,7 +57,7 @@ describe('User API endpoints', function () {
 
   it('should get one user', function (done) {
     chai.request(app)
-      .get(`/user/${SAMPLE_OBJECT_ID}`)
+      .get(`/user`)
       .set('Authorization', `Bearer ${token}`)
       .end(function (err, res) {
         if (err) { done(err); }
@@ -88,43 +87,40 @@ describe('User API endpoints', function () {
 
   it('should update a user', function(done) {
     chai.request(app)
-      .put(`/user/${SAMPLE_OBJECT_ID}`)
+      .put(`/user/update`)
       .set('Authorization', `Bearer ${token}`)
+      .set('content-type', 'application/json')
       .send({ username: 'mynewusername' })
       .end(function (err, res) {
         if (err) { done(err); }
         expect(res).to.have.status(200)
         expect(res.body.user).to.be.an('object')
         expect(res.body.user).to.have.property('username', 'mynewusername')
-      })
-  })
+        done();
+      });
+  });
 
   it('should sign in a user', function (done) {
     chai.request(app)
       .post('/user/signin')
-      .send({ username: 'anotheruser', password: 'mypassword' })
+      .send({ username: 'myuser', password: 'mypassword' })
       .end( function (err, res) {
-        console.log(`Err line 95 sign in: ${err}`)
         if (err) { done(err); }
         expect(res).to.have.status(200);
-        // expect(res.body.token).to.be.a('string');
+        expect(res.body.token).to.be.a('string');
         done();
       });
   });
 
   it('should delete a user', function (done) {
+    this.timeout(10000)
     chai.request(app)
-      .delete(`/user/${SAMPLE_OBJECT_ID}`)
+      .delete(`/user/delete`)
       .set('Authorization', `Bearer ${token}`)
       .end( function (err, res) {
         if (err) { done(err); }
         expect(res).to.have.status(204);
-
-        // check that user is actually deleted from database
-        User.findOne({ username: 'myuser' }).then(function (user) {
-          expect(user).to.equal(null);
-          done();
-        });
+        done();
       });
   });
 });

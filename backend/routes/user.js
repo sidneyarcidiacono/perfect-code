@@ -6,13 +6,13 @@ const userController = require('../controllers/user');
 const isAuth = require('../middleware/isAuth');
 
 // Restrict access to routes using isAuth middleware
-router.get('/:id', isAuth, userController.getUser);
+router.delete('/delete', isAuth, userController.deleteUserAccount);
 
 // Restrict access to routes using isAuth middleware
-router.delete('/:id', isAuth, userController.deleteUserAccount);
+router.put('/update', isAuth, userController.updateUser);
 
 // Restrict access to routes using isAuth middleware
-router.put('/:id', isAuth, userController.updateUser);
+router.get('/', isAuth, userController.getUser);
 
 router.post('/signin', userController.signInUser);
 

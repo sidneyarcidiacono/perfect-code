@@ -46,16 +46,14 @@ describe('Code submission API endpoints', function () {
           _id: SAMPLE_SUBMISSION_ID,
           user: user._id,
         });
-        return sampleSubmission.save()
-          .then(function () {
-            chai.request(app)
-              .post('/user/signup')
-              .send(sampleUser)
-              .end(function (err, res) {
-                if (err) { done(err); }
-                token = res.body.token;
-                done();
-              });
+        chai.request(app)
+          .post('/user/signup')
+          .send(sampleUser)
+          .end(function (err, res) {
+            if (err) { done(err); }
+            sampleSubmission.save()
+            token = res.body.token;
+            done();
           });
       });
   });
@@ -74,12 +72,10 @@ describe('Code submission API endpoints', function () {
   it('should show a code submission analysis', function (done) {
     chai.request(app)
       .get(`/submission/${SAMPLE_SUBMISSION_ID}`)
+      .set('Authorization', `Bearer ${token}`)
       .end( function (err, res) {
         if (err) { done(err); }
         expect(res).to.have.status(200);
-        // expect(res.body).to.be.an('object');
-        // expect(res.body.progress).to.be.a('number');
-        // expect(res.body.analysisResults).to.be.an('object');
         done();
       });
   });

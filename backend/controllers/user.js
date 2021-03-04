@@ -68,7 +68,7 @@ exports.signInUser = (req, res, next) => {
 };
 
 exports.getUser = (req, res, next) => {
-  User.findById(req.params.id).lean().populate('codeSubs')
+  User.findById(req.userId).lean().populate('codeSubs')
     .then((user) => res.status(200).json({ user }))
     .catch((err) => {
       throw new Error('User not found.');
@@ -76,7 +76,7 @@ exports.getUser = (req, res, next) => {
 };
 
 exports.updateUser = (req, res, next) => {
-  User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  User.findOneAndUpdate({ _id: req.userId }, req.body, { new: true })
     .then((user) => res.status(200).json({ user }))
     .catch((err) => {
       throw err.message;
@@ -84,9 +84,11 @@ exports.updateUser = (req, res, next) => {
 };
 
 exports.deleteUserAccount = (req, res, next) => {
-  User.findByIdAndDelete(req.params.id)
-    .then((deletedUser) => res.status(204))
-    .catch((err) => {
+  User.findOneAndDelete({ _id: req.userId }, (err, deletedUser) => {
+    if (err) {
       throw err.message;
-    });
+    } else {
+      return res.status(204).json({ msg: 'User successfully deleted' });
+    }
+  });
 };

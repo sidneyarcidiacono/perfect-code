@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use('/user', userRoutes);
 app.use('/submission', submissionRoutes);
 
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
   .then((result) => {
     console.log('CONNECTED');
     app.listen(3000);
